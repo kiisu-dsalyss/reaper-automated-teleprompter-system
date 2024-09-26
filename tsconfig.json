@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "ES6",                          // Specify ECMAScript target version
+    "module": "CommonJS",                      // Specify module code generation
+    "lib": ["ES6", "DOM"],                     // Specify library files to include in the compilation
+    "allowJs": false,                          // Allow JavaScript files to be compiled
+    "outDir": "./dist",                        // Redirect output structure to the directory
+    "rootDir": "./src",                        // Specify the root directory of input files
+    "strict": true,                            // Enable all strict type-checking options
+    "esModuleInterop": true,                   // Enables emit interoperability between CommonJS and ES Modules
+    "skipLibCheck": true,                      // Skip type checking of all declaration files (helps with some compatibility issues)
+    "forceConsistentCasingInFileNames": true,  // Disallow inconsistently-cased references to the same file
+
+    /* Node.js Specific Options */
+    "moduleResolution": "node",                // Use Node.js module resolution algorithm
+    "types": ["node"],                         // Include type definitions for Node.js
+    "typeRoots": ["./node_modules/@types", "./types"], // Specify type definition files to be included in compilation
+
+    /* Source Map Options */
+    "sourceMap": true,                         // Generates corresponding '.map' file
+    "inlineSourceMap": false,                  // Emit a single file with source maps instead of having a separate file
+    "inlineSources": true,                     // Include source code in the source maps
+    "removeComments": true,                    // Remove all comments except copy-right header comments
+
+    /* Additional Checks */
+    "noImplicitAny": true,                     // Raise error on expressions and declarations with an implied 'any' type
+    "strictNullChecks": true,                  // Enable strict null checks
+    "strictFunctionTypes": true,               // Enable strict checking of function types
+    "noImplicitThis": true,                    // Raise error on 'this' expressions with an implied 'any' type
+    "alwaysStrict": true,                      // Parse in strict mode and emit "use strict" for each source file
+
+    /* Advanced Options */
+    "resolveJsonModule": true,                 // Include modules imported with .json extension
+    "outDir": "./dist",                        // Redirect output structure to the directory
+    "rootDir": "./src"                         // Specify the root directory of input files
+  },
+  "include": [
+    "src/**/*.ts",                             // Include all .ts files within the src directory
+    "types/**/*.d.ts"                          // Include all .d.ts files within the types directory for custom type definitions
+  ],
+  "exclude": [
+    "node_modules",                            // Exclude the node_modules directory
+    "dist"                                     // Exclude the dist directory
+  ]
+}
