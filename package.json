@@ -4,14 +4,14 @@
     "description": "A TypeScript project to connect to REAPER DAW via OSC.",
     "main": "dist/index.js",
     "scripts": {
-      "build": "tsc",
-      "start": "node dist/index.js",
-      "dev": "tsc && node dist/index.js",
-      "watch": "tsc --watch"
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "tsc && node dist/index.js",
+        "watch": "tsc --watch"
     },
     "repository": {
-      "type": "git",
-      "url": "https://github.com/kiisu-dsalyss/reaper-automated-teleprompter-system"
+        "type": "git",
+        "url": "https://github.com/kiisu-dsalyss/reaper-automated-teleprompter-system"
     },
     "keywords": [
         "typescript",
@@ -19,15 +19,15 @@
         "reaper",
         "daw",
         "automation"
-      ],
-      "author": "kiisu dsalyss",
-      "license": "MIT",
-      "dependencies": {
+    ],
+    "author": "kiisu dsalyss",
+    "license": "MIT",
+    "dependencies": {
+        "node-fetch": "^2.7.0",
         "osc": "^2.4.1"
-      },
-      "devDependencies": {
+    },
+    "devDependencies": {
         "@types/node": "^20.4.2",
         "typescript": "^5.1.6"
-      }
     }
-    
+}
