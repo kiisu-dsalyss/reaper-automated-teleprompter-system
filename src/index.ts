@@ -1,4 +1,4 @@
-import { getOSCmessages } from './oscListener';
+import { startOSCStream } from './oscListener';
 
-getOSCmessages();
-
+// Start the OSC stream processing
+startOSCStream();
