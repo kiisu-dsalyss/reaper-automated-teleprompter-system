@@ -2,7 +2,7 @@ import { Region } from "./Region";
 import { RegionsData } from "./RegionsData";
 
 // Function to parse the region response
-export function parseRegionResponse(responseBody: string): RegionsData {
+export function parseRegionResponse({ responseBody }: { responseBody: string; }): RegionsData {
   const lines = responseBody.split('\n');
   const regions: Region[] = [];
   let counter = 1;

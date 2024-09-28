@@ -1,3 +1,4 @@
+import { decimalToHex } from "./decimalToHex";
 import { OSCMessage } from "./OSCMessage";
 import { parseRegionResponse } from "./parseRegionResponse";
 import { RegionsData } from "./RegionsData";
@@ -23,7 +24,7 @@ export function startOSCStream(): void {
 
   // Handle incoming OSC messages as they arrive
   simpleListener.on("message", (msg: OSCMessage) => {
-    handleOSCMessage(msg);
+    handleOSCMessage({ msg });
     updateConsoleDisplay();
   });
 
@@ -41,7 +42,7 @@ async function fetchRegionsData(): Promise<void> {
     const currentURL = `http://${serverIP}:8080/_/REGION`; // Use server IP from config
     const response = await fetch(currentURL);
     const responseBody = await response.text(); // Assuming the response is a text format
-    regions = parseRegionResponse(responseBody); // Parse the region response
+    regions = parseRegionResponse({ responseBody }); // Parse the region response
     console.log("Regions data fetched successfully:", regions);
   } catch (error) {
     console.error("Error fetching regions data:", error);
@@ -49,7 +50,7 @@ async function fetchRegionsData(): Promise<void> {
 }
 
 // Function to handle each OSC message as it arrives
-function handleOSCMessage(msg: OSCMessage): void {
+function handleOSCMessage({ msg }: { msg: OSCMessage; }): void {
   switch (msg.address) {
     case "/beat/str":
       beatPosition = msg.args[0];
@@ -62,7 +63,7 @@ function handleOSCMessage(msg: OSCMessage): void {
       break;
     case "/lastregion/name":
       regionName = msg.args[0];
-      updateRegionColor(regionName); // Update region color based on region name
+      updateRegionColor({ regionName }); // Update region color based on region name
       break;
     default:
       // Unhandled messages can be logged for debugging if necessary
@@ -71,21 +72,12 @@ function handleOSCMessage(msg: OSCMessage): void {
 }
 
 // Function to update region color based on the region name
-function updateRegionColor(regionName: string): void {
+function updateRegionColor({ regionName }: { regionName: string; }): void {
   if (regions[regionName] && regions[regionName].Color) {
     regionColor = decimalToHex(parseInt(regions[regionName].Color, 10));
   } else {
     regionColor = "Unknown";
   }
-}
-
-// Function to convert decimal to hex
-function decimalToHex(decimal: number): string {
-  let hex = decimal.toString(16);
-  while (hex.length < 6) {
-    hex = "0" + hex;
-  }
-  return hex.toUpperCase(); // Ensure it's uppercase
 }
 
 // Function to update the console display without scrolling
