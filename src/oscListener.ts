@@ -51,19 +51,18 @@ async function fetchRegionsData(): Promise<void> {
 
 // Function to handle each OSC message as it arrives
 function handleOSCMessage({ msg }: { msg: OSCMessage; }): void {
-  const handlers: { [key: string]: (arg: any) => void } = {
-    "/beat/str": (arg) => { beatPosition = arg; },
-    "/time": (arg) => { timePosition = arg.toFixed(2); },
-    "/tempo/raw": (arg) => { tempo = arg.toFixed(2); },
-    "/lastregion/name": (arg) => {
-      regionName = arg;
-      updateRegionColor({ regionName });
+  const handlers: { [key: string]: (args: any[]) => void } = {
+    "/beat/str": (args) => beatPosition = args[0],
+    "/time": (args) => timePosition = args[0].toFixed(2), // format time with 2 decimal places
+    "/tempo/raw": (args) => tempo = args[0].toFixed(2), // format tempo with 2 decimal places
+    "/lastregion/name": (args) => {
+      regionName = args[0];
+      updateRegionColor({ regionName }); // Update region color based on region name
     }
   };
 
-  const handler = handlers[msg.address];
-  if (handler) {
-    handler(msg.args[0]);
+  if (handlers[msg.address]) {
+    handlers[msg.address](msg.args);
   } else {
     // Unhandled messages can be logged for debugging if necessary
     // console.log("Unhandled message address: ", msg.address);
