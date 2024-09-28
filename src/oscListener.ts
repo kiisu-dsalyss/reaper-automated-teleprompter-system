@@ -1,24 +1,11 @@
+import { OSCMessage } from "./OSCMessage";
+import { parseRegionResponse } from "./parseRegionResponse";
+import { RegionsData } from "./RegionsData";
+
 const osc = require('osc'); // CommonJS module import for osc
 const readline = require('readline');
 const fetch = require('node-fetch'); // CommonJS import
 const { serverIP } = require('./secrets/config.json'); // Import the server IP from config
-
-interface OSCMessage {
-  address: string;
-  args: any[];
-  timestamp: Date;
-}
-
-interface Region {
-  name: string;
-  start: number;
-  end: number;
-  color: string;
-}
-
-interface RegionsData {
-  [key: string]: { Start: number; End: number; Color: string };
-}
 
 let beatPosition: string = "";
 let timePosition: string = "";
@@ -26,41 +13,6 @@ let tempo: string = "";
 let regionName: string = "";
 let regionColor: string = ""; // Variable for region color
 let regions: RegionsData = {}; // Stores the region data
-
-// Function to parse the region response
-function parseRegionResponse(responseBody: string): RegionsData {
-  const lines = responseBody.split('\n');
-  const regions: Region[] = [];
-  let counter = 1;
-  for (let i = 1; i < lines.length - 1; i++) {
-    const values = lines[i].split('\t');
-    if (values[0] === 'REGION') {
-      let regionName = values[1] || '-';
-      if (regions.find(region => region.name === regionName)) {
-        regionName += ` ${counter}`;
-        counter++;
-      }
-      regions.push({
-        name: regionName,
-        start: parseInt(values[3], 10),
-        end: parseInt(values[4], 10),
-        color: values[5]
-      });
-    }
-  }
-  regions.sort((a, b) => a.start - b.start);
-  const result: RegionsData = regions.reduce((result: RegionsData, region) => {
-    if (region.name !== '-') {
-      result[region.name] = {
-        Start: region.start,
-        End: region.end,
-        Color: region.color
-      };
-    }
-    return result;
-  }, {});
-  return result;
-}
 
 // Function to start listening for specific OSC messages and process them as they arrive
 export function startOSCStream(): void {
