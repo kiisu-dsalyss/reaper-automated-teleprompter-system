@@ -3,35 +3,29 @@ import { RegionsData } from "./interfaces/RegionsData";
 
 // Function to parse the region response
 export function parseRegionResponse({ responseBody }: { responseBody: string; }): RegionsData {
-  const lines = responseBody.split('\n');
-  const regions: Region[] = [];
-  let counter = 1;
-  for (let i = 1; i < lines.length - 1; i++) {
-    const values = lines[i].split('\t');
-    if (values[0] === 'REGION') {
+  const regions: Region[] = responseBody.split('\n')
+    .slice(1, -1)
+    .map(line => line.split('\t'))
+    .filter(values => values[0] === 'REGION')
+    .map((values, index, arr) => {
       let regionName = values[1] || '-';
-      if (regions.find(region => region.name === regionName)) {
-        regionName += ` ${counter}`;
-        counter++;
+      if (arr.slice(0, index).some(region => region[1] === regionName)) {
+        regionName += ` ${index + 1}`;
       }
-      regions.push({
+      return {
         name: regionName,
         start: parseInt(values[3], 10),
         end: parseInt(values[4], 10),
         color: values[5]
-      });
-    }
-  }
-  regions.sort((a, b) => a.start - b.start);
-  const result: RegionsData = regions.reduce((result: RegionsData, region) => {
-    if (region.name !== '-') {
-      result[region.name] = {
-        Start: region.start,
-        End: region.end,
-        Color: region.color
       };
-    }
-    return result;
-  }, {});
-  return result;
+    });
+
+  return regions
+    .sort((a, b) => a.start - b.start)
+    .reduce((result: RegionsData, { name, start, end, color }) => {
+      if (name !== '-') {
+        result[name] = { Start: start, End: end, Color: color };
+      }
+      return result;
+    }, {});
 }

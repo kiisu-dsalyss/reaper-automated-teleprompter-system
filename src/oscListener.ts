@@ -2,11 +2,11 @@ import { decimalToHex } from "./decimalToHex";
 import { OSCMessage } from "./interfaces/OSCMessage";
 import { parseRegionResponse } from "./parseRegionResponse";
 import { RegionsData } from "./interfaces/RegionsData";
+import readline from 'readline';
+import fetch from 'node-fetch'; // CommonJS import
 
 const osc = require('osc'); // CommonJS module import for osc
-const readline = require('readline');
-const fetch = require('node-fetch'); // CommonJS import
-const { serverIP } = require('./secrets/config.json'); // Import the server IP from config
+const { serverIP, serverPort } = require('./secrets/config.json'); // Import the server IP from config
 
 let beatPosition: string = "";
 let timePosition: string = "";
@@ -39,7 +39,7 @@ export function startOSCStream(): void {
 // Function to fetch region data from the server
 async function fetchRegionsData(): Promise<void> {
   try {
-    const currentURL = `http://${serverIP}:8080/_/REGION`; // Use server IP from config
+    const currentURL = `http://${serverIP}:${serverPort}/_/REGION`; // Use server IP from config
     const response = await fetch(currentURL);
     const responseBody = await response.text(); // Assuming the response is a text format
     regions = parseRegionResponse({ responseBody }); // Parse the region response
@@ -84,15 +84,18 @@ function updateRegionColor({ regionName }: { regionName: string; }): void {
 function updateConsoleDisplay(): void {
   readline.cursorTo(process.stdout, 0, 0); // Move cursor to the top left
   readline.clearScreenDown(process.stdout); // Clear the screen from the cursor down
-  console.log(`┌──────────────────────────────────────────────┐`);
-  console.log(`  OSC Stream Live Update                       `);
-  console.log(`├──────────────────────────────────────────────┤`);
-  console.log(`  Beat Position: ${beatPosition}                      `);
-  console.log(`  Time Position: ${timePosition} sec                  `);
-  console.log(`  Tempo: ${tempo} BPM                                 `);
-  console.log(`  Last Region: ${regionName}                          `);
-  console.log(`  Region Color: #${regionColor}                          `); // Display the region color in hex
-  console.log(`└──────────────────────────────────────────────┘`);
+  const displayData = [
+    `┌──────────────────────────────────────────────┐`,
+    `  OSC Stream Live Update                       `,
+    `├──────────────────────────────────────────────┤`,
+    `  Beat Position: ${beatPosition}                      `,
+    `  Time Position: ${timePosition} sec                  `,
+    `  Tempo: ${tempo} BPM                                 `,
+    `  Last Region: ${regionName}                          `,
+    `  Region Color: #${regionColor}                          `, // Display the region color in hex
+    `└──────────────────────────────────────────────┘`
+  ];
+  console.log(displayData.join('\n'));
 }
 
 // Clear the terminal and start listening
