@@ -1,7 +1,7 @@
 import { decimalToHex } from "./decimalToHex";
-import { OSCMessage } from "./OSCMessage";
+import { OSCMessage } from "./interfaces/OSCMessage";
 import { parseRegionResponse } from "./parseRegionResponse";
-import { RegionsData } from "./RegionsData";
+import { RegionsData } from "./interfaces/RegionsData";
 
 const osc = require('osc'); // CommonJS module import for osc
 const readline = require('readline');
@@ -74,7 +74,7 @@ function handleOSCMessage({ msg }: { msg: OSCMessage; }): void {
 // Function to update region color based on the region name
 function updateRegionColor({ regionName }: { regionName: string; }): void {
   if (regions[regionName] && regions[regionName].Color) {
-    regionColor = decimalToHex(parseInt(regions[regionName].Color, 10));
+    regionColor = decimalToHex({ decimal: parseInt(regions[regionName].Color, 10) });
   } else {
     regionColor = "Unknown";
   }

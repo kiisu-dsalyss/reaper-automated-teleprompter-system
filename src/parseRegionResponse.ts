@@ -1,5 +1,5 @@
-import { Region } from "./Region";
-import { RegionsData } from "./RegionsData";
+import { Region } from "./interfaces/Region";
+import { RegionsData } from "./interfaces/RegionsData";
 
 // Function to parse the region response
 export function parseRegionResponse({ responseBody }: { responseBody: string; }): RegionsData {
